@@ -1,7 +1,7 @@
 # Node: Web Server
 Accepts HTTP request on port: 3000 and respond with a simple message
 
-## Includes:
+## Includes
 * relevant comments
 * logic to hanlde graceful shutdown
 
@@ -31,7 +31,7 @@ npm run start
 ```
 
 ### Docker
-Build docker image with a predefined name
+Build docker image with a predefined name "first-web-app"
 ```
 npm run docker-build
 ```
