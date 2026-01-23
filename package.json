@@ -1,7 +1,7 @@
 {
-  "name": "web-server",
+  "name": "node-web-server",
   "version": "1.0.0",
-  "description": "Basic Web Server",
+  "description": "Node Web Server",
   "license": "ISC",
   "author": "@eebaez",
   "type": "commonjs",
