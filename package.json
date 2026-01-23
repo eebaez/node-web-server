@@ -1,0 +1,16 @@
+{
+  "name": "web-server",
+  "version": "1.0.0",
+  "description": "Basic Web Server",
+  "license": "ISC",
+  "author": "@eebaez",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --env-file=.env ./src/server.js",
+    "docker-build": "docker build -t node-web-server .",
+    "docker-run": "docker run --name first-web-app -p 3000:3000 node-web-server",
+    "docker-destroy": "docker container stop first-web-app && docker container rm first-web-app"
+  }
+}
