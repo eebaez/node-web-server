@@ -50,12 +50,6 @@ const log = (level, message) => {
     if (level === "debug" && NODE_ENV === "production")
         return;
 
-    const logEntry = {
-        "timestamp": getTimestamp(),
-        "level": level,
-        "message": message
-    };
-
     let levelColorCoded = level;
 
     switch (level) {
