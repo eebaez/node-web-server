@@ -1,5 +1,5 @@
 # Node: Web Server
-Accepts HTTP request on port: 3000 and respond with a simple message
+Handles HTTP requests on port: 3000 (configurable) and respond with a simple message
 
 ## Includes
 * relevant comments
