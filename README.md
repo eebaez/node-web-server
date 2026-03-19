@@ -4,6 +4,7 @@ Handles HTTP requests on port: 3000 (configurable) and respond with a simple mes
 ## Includes
 * relevant comments
 * logic to hanlde graceful shutdown
+* structure logging
 
 ## Technologies
 - Developed using NodeJS v24
