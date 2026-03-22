@@ -7,7 +7,7 @@ Handles HTTP requests on port: 3000 (configurable) and respond with a simple mes
 * structure logging
 
 ## Technologies
-- Developed using NodeJS v24
+- Developed using NodeJS v24 and Typescript
 - Using npm v11 for package handling
 - Usign Docker to build image and run as docker container
 
