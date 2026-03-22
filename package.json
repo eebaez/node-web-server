@@ -4,13 +4,21 @@
   "description": "Node Web Server",
   "license": "ISC",
   "author": "@eebaez",
-  "type": "commonjs",
-  "main": "server.js",
+  "type": "module",
+  "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --env-file=.env ./src/server.js",
+    "start": "node --env-file=.env ./dist/server.js",
+    "build": "tsc",
+    "dev": "ts-node ./src/server.ts",
     "docker-build": "docker build -t node-web-server .",
     "docker-run": "docker run --name first-web-app -p 3000:3000 node-web-server",
     "docker-destroy": "docker container stop first-web-app && docker container rm first-web-app"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^25.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

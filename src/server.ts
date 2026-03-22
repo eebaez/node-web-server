@@ -1,20 +1,22 @@
 // modules
-const http = require("node:http");
-const logger = require("./utilities/logger");
+import { createServer } from "node:http";
+import logger from "./utilities/logger.ts";
 
 // variables
-const hostname = process.env.HOSTNAME || "localhost";
-const port = process.env.PORT || 3000;
+const hostname: string = process.env.HOSTNAME || "localhost";
+const port: number = Number(process.env.PORT) || 3000;
 
-const server = http.createServer();
+type SIGNAL = "SIGTERM" | "SIGINT";
+
+const server = createServer();
 
 // helper functions
-const inspectRequest = (request) => {
+const inspectRequest = (request: any) => {
     const { method, url, headers } = request;
     logger.debug(`${method}, ${url}, ${headers["user-agent"]}`);
 };
 
-const gracefulShutdown = signal => {
+const gracefulShutdown = (signal: SIGNAL) => {
     logger.info(`Received ${signal}. Shutting down gracefully...`);
     
     server.close(() => {
@@ -33,19 +35,22 @@ const gracefulShutdown = signal => {
 };
 
 //listener
-server.on("request", (request, response) => {
+server.on("request", (request: any, response: any) => {
     
     // handle request body
-    let body = [];
-    request.on("error", err => {
+    let rawBody: any[] = [];
+
+    request.on("error", (err: string) => {
         logger.error(err);
-    }).on("data", chunck => {
-        body.push(chunck);
+
+    }).on("data", (chunck: any[]) => {
+        rawBody.push(chunck);
+
     }).on("end", () => {
-        body = Buffer.concat(body).toString();
+        const body = Buffer.concat(rawBody).toString();
         // now that the body has arrived and the rest of request info is available then it can be processed.
 
-        response.on("error", err => {
+        response.on("error", (err: string) => {
             logger.error(err);
         });
 
@@ -58,7 +63,7 @@ server.on("request", (request, response) => {
 });
 
 server.listen(port, hostname, () => {
-  logger.info(`Server running at http://${hostname}:${port}/`);
+    logger.info(`Server running at http://${hostname}:${port}/`);
 });
 
 // list for termination signals
