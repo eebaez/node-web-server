@@ -1,5 +1,6 @@
 // modules
 import { createServer } from "node:http";
+import type { IncomingMessage, ServerResponse } from "node:http";
 import logger from "./utilities/logger.ts";
 
 // variables
@@ -11,7 +12,7 @@ type SIGNAL = "SIGTERM" | "SIGINT";
 const server = createServer();
 
 // helper functions
-const inspectRequest = (request: any) => {
+const inspectRequest = (request: IncomingMessage) => {
     const { method, url, headers } = request;
     logger.debug(`${method}, ${url}, ${headers["user-agent"]}`);
 };
@@ -35,23 +36,23 @@ const gracefulShutdown = (signal: SIGNAL) => {
 };
 
 //listener
-server.on("request", (request: any, response: any) => {
-    
+server.on("request", (request: IncomingMessage, response: ServerResponse) => {
+
     // handle request body
-    let rawBody: any[] = [];
+    const rawBody: Buffer[] = [];
 
-    request.on("error", (err: string) => {
-        logger.error(err);
+    request.on("error", (err: Error) => {
+        logger.error(err.message);
 
-    }).on("data", (chunck: any[]) => {
-        rawBody.push(chunck);
+    }).on("data", (chunk: Buffer) => {
+        rawBody.push(chunk);
 
     }).on("end", () => {
         const body = Buffer.concat(rawBody).toString();
         // now that the body has arrived and the rest of request info is available then it can be processed.
 
-        response.on("error", (err: string) => {
-            logger.error(err);
+        response.on("error", (err: Error) => {
+            logger.error(err.message);
         });
 
         inspectRequest(request);
