@@ -1,31 +1,15 @@
-/* Logger 
-* Purpose:
-    Standarize logging functionality across the application.
-* Functionality:
-    - logging levels
-    - color coding
-    - structured output
-    - debug mode for non-production setup
-*/
+/* Logger
+ * Purpose:
+ *     Standardize logging functionality across the application.
+ * Functionality:
+ *     - logging levels
+ *     - one JSON object per line (valid JSON, safe escaping via JSON.stringify)
+ *     - warn/error on stderr via console.warn / console.error
+ *     - debug suppressed when NODE_ENV is production
+ */
 
 const { NODE_ENV } = process.env;
-type LEVELS = "debug" | "info" | "warn" | "error" ;
-
-const turnRed = (text: string): string => {
-    return `\x1b[31m${text}\x1b[0m`;
-};
-
-const turnGreen = (text: string): string => {
-    return `\x1b[32m${text}\x1b[0m`;
-};
-
-const turnYellow = (text: string): string => {
-    return `\x1b[33m${text}\x1b[0m`;
-};
-
-const turnPurple = (text: string): string => {
-    return `\x1b[35m${text}\x1b[0m`;
-};
+type LEVELS = "debug" | "info" | "warn" | "error";
 
 const getTimestamp = (): string => {
     return new Date().toISOString();
@@ -47,31 +31,32 @@ const error = (message: string) => {
     log("error", message);
 };
 
+const writeLine = (level: LEVELS, line: string) => {
+    switch (level) {
+        case "debug":
+        case "info":
+            console.log(line);
+            break;
+        case "warn":
+            console.warn(line);
+            break;
+        case "error":
+            console.error(line);
+            break;
+    }
+};
+
 const log = (level: LEVELS, message: string) => {
     if (level === "debug" && NODE_ENV === "production")
         return;
 
-    let levelColorCoded: string;
+    const line = JSON.stringify({
+        timestamp: getTimestamp(),
+        level,
+        message,
+    });
 
-    switch (level) {
-        case "debug":
-            levelColorCoded = turnPurple(level);
-            break;
-        case "info":
-            levelColorCoded = turnGreen(level);
-            break;
-        case "warn":
-            levelColorCoded = turnYellow(level);
-            break;
-        case "error":
-            levelColorCoded = turnRed(level);
-            break;
-        default:
-            levelColorCoded = turnGreen(level);
-            break;
-    }
-
-    console.log(`{ "timestamp": "${getTimestamp()}", "level": "${levelColorCoded}", "message": "${message}" }`);
+    writeLine(level, line);
 };
 
 export default {
@@ -79,5 +64,5 @@ export default {
     info,
     warn,
     error,
-    log
+    log,
 };
