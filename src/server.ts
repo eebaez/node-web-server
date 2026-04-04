@@ -42,7 +42,7 @@ server.on("request", (request: IncomingMessage, response: ServerResponse) => {
     const rawBody: Buffer[] = [];
 
     request.on("error", (err: Error) => {
-        logger.error(err.message);
+        logger.error(err);
 
     }).on("data", (chunk: Buffer) => {
         rawBody.push(chunk);
@@ -52,7 +52,7 @@ server.on("request", (request: IncomingMessage, response: ServerResponse) => {
         // now that the body has arrived and the rest of request info is available then it can be processed.
 
         response.on("error", (err: Error) => {
-            logger.error(err.message);
+            logger.error(err);
         });
 
         inspectRequest(request);
